@@ -1,0 +1,46 @@
+resource "aws_s3_bucket" "test-s3" {
+  bucket = "suganth46-s3-test"
+
+  tags = {
+    Name = "suganth46-s3-test"
+    Team = var.tag_team
+    Config_Platform = var.tag_platform
+  }
+}
+
+variable "tag_team" {
+  type = string
+  default = "devops"
+}
+
+variable "tag_platform" {
+  default = "terraform"
+}
+
+variable "my-instance" {
+  default = "t3.micro"
+}
+variable "my-ami" {
+  default = "ami-0b6c6ebed2801a5cb"
+}
+
+resource "aws_iam_user" "demo-iam" {
+  name = "demo-user"
+  path = "/system/"
+
+tags = {
+  team="DEv"
+  Config_Platform="terraform"
+}
+}
+
+resource "aws_instance" "demo-ec2" {
+  ami = var.my-ami
+  instance_type = var.my-instance
+  key_name = "Test-server"
+  vpc_security_group_ids = [ "sg-0aaf683b42c38661e" ]
+  associate_public_ip_address = "true"  
+  tags = {
+    name="demo-ec2"
+  }
+}
